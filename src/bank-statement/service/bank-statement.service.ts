@@ -25,7 +25,7 @@ export class BankStatementService implements IBankStatementService {
         transaction.type= transferType;
         transaction.amount = amount;
         transaction.description = description;
-        this.statementRepo.create(transaction)
+        await this.statementRepo.create(transaction)
     }
     async addCCTransaction(transferType: TransactionType, amount: number, account: CheckingAccount,description : string, direction : TransactionDirection): Promise<void> {
         const transaction = new BankStatement();

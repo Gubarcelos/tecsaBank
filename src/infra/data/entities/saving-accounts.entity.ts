@@ -18,4 +18,6 @@ export class SavingsAccountEntity extends BankAccountEntity {
 
   @OneToMany(() => BankStatementEntity, statement => statement.savingAccount)
   statement: BankStatementEntity[];
+
+  accrueInterest(): void{}
 }

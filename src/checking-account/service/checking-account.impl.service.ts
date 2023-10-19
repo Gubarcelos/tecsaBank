@@ -70,7 +70,8 @@ export class CheckingAccountService implements ICheckingAccountService {
         if (!account.isOverdraftAllowed) {
             throw new BadRequestException('Limite de cheque especial não permitido nesta conta');
         }
-        account.maxLimit += additionalLimit;
+       const nLimit = parseFloat(account.maxLimit.toString()) + parseFloat(additionalLimit.toString());
+       account.maxLimit = nLimit
         return await this.accountRepo.update(account);
     }
 
