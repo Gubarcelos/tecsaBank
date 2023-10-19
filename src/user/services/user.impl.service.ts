@@ -48,4 +48,9 @@ export class UserService implements IUserService {
           }
     }
 
+    async getOne(id : string) {
+      const user = this.userRepository.findBYId(id);
+      return user;
+    }
+
 }

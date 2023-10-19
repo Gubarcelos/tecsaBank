@@ -15,6 +15,13 @@ export class UserRepository implements IUserRepository {
         return this.userRepository.save(user);
 
     }
+    async findBYId (id : string) : Promise<User>{
+        return this.userRepository.createQueryBuilder('user')
+        .leftJoinAndSelect('user.savingAccount', 'savingAccount') 
+        .leftJoinAndSelect('user.checkingAccount', 'checkingAccount') 
+        .where('user.id = :id', { id })
+        .getOne();
+    }
     async findByCpf(cpf: string): Promise<User> {
         return this.userRepository.createQueryBuilder('user')
             .leftJoinAndSelect('user.savingAccount', 'savingAccount') 

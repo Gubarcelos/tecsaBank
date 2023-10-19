@@ -20,12 +20,12 @@ export class AccountDTO {
 
     @IsString()
     @IsNotEmpty()
-    pixKey: string;
+    pixKey?: string;
 
     @IsNumber()
     @IsOptional()
-    maxLimit : number
+    maxLimit ?: number
 
     @IsArray()
-    statement: BankStatement[];
+    statement?: BankStatement[];
 }
