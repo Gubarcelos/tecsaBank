@@ -30,7 +30,7 @@ import {
 
 
 function isValid(cpf: string): boolean {
-    cpf = cpf.replace(/[\.-]/g, ''); // Remove pontos e traços
+    cpf = cpf.replace(/[\.-]/g, '');
     cpf.length !== 11 ? false : true;
   
     let sum = 0;

@@ -4,6 +4,7 @@ import { ISavingAccountService } from "./interface/saving-accoutn.service.interf
 import { SavingsAccount } from "src/domain/model/saving-accounts";
 import { User } from "src/domain/model/user";
 import { SavingAccountRepository } from "../repository/saving-account.repository";
+import { Cron, CronExpression } from "@nestjs/schedule";
 
 @Injectable()
 export class SavingsAccountService implements ISavingAccountService {
@@ -29,7 +30,7 @@ export class SavingsAccountService implements ISavingAccountService {
         account: SavingsAccount,
         amount: number
     ): Promise<SavingsAccount> {
-        account.balance += amount;
+        account.balance = parseFloat(account.balance.toString()) + parseFloat(amount.toString());
         return await this.accountRepo.update(account);
     }
 
@@ -41,8 +42,17 @@ export class SavingsAccountService implements ISavingAccountService {
             throw new BadRequestException('Saldo insuficiente');
         }
 
-        sourceAccount.balance -= amount;
+        sourceAccount.balance = parseFloat(sourceAccount.balance.toString()) + parseFloat(amount.toString());
         return await this.accountRepo.update(sourceAccount);
+    }
+
+    @Cron(CronExpression.EVERY_DAY_AT_10AM)
+    async handleinterestRate() {
+        const accounts = await this.accountRepo.getAll();
+        accounts.forEach(ac => {
+            ac.accrueInterest();
+            this.accountRepo.update(ac);
+        })
     }
 
 }

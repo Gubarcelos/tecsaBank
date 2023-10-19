@@ -1,11 +1,15 @@
-import { Controller, Get, Param, Post, Query, Res } from "@nestjs/common";
+import { Controller, Get, Param, Post, Query, Res, UseGuards } from "@nestjs/common";
 import { BankStatementService } from "../service/bank-statement.service";
 import { Pagination } from "src/domain/interface/pagination.interface";
 import { BankStatement } from "src/domain/model/bank-statement";
 import { Response } from "express";
 import { BankStatementMapper } from "./dtos/mapper/bank-statement.mapper";
 import { QueueService } from "src/mail/queue.service";
+import { AuthGuard } from "src/infra/auth/auth.guard";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('BankStatement')
+// @UseGuards(AuthGuard)
 @Controller('bank-statements')
 export class BankStatementController {
   constructor(
@@ -13,6 +17,8 @@ export class BankStatementController {
     private readonly queueService : QueueService
     ) {}
 
+
+  @ApiOperation({ summary: 'Get bank statements by date range' })
   @Get('by-range-date')
   async getBankStatementsByRangeDate(
     @Query('accountNumber') accountNumber: string,
@@ -37,6 +43,9 @@ export class BankStatementController {
     res.header('X-Page-Count', pagination.pageCount.toString());
     res.header('X-Current-Page', pagination.currentPage.toString());
     res.header('X-Per-Page', pagination.itemsPerPage.toString());
+    if(pagination.items.length < 1) {
+      return res.status(200).json(pagination.items)
+    }
 
     return res.status(200).json(BankStatementMapper.toDTO(pagination.items));
   }
@@ -59,6 +68,10 @@ export class BankStatementController {
     res.header('X-Current-Page', pagination.currentPage.toString());
     res.header('X-Per-Page', pagination.itemsPerPage.toString());
 
+    if(pagination.items.length < 1) {
+      return res.status(200).json(pagination.items)
+    }
+
     return res.status(200).json(BankStatementMapper.toDTO(pagination.items));
   }
 
@@ -76,6 +89,10 @@ export class BankStatementController {
     );
 
     try {
+      if(pagination.items.length < 1 ) {
+        return res.status(200).json({ message: 'conta não possui extratos' });
+              
+      }
       await this.bankStatementService.sendMail(BankStatementMapper.toDTO(pagination.items));
       return res.status(200).json({ message: 'E-mail de extratos bancários enviado com sucesso!' });
     } catch (error) {

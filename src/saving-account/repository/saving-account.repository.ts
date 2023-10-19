@@ -27,5 +27,9 @@ export class SavingAccountRepository implements ISavingAccountRepository{
         return this.accountRepo.save(cp);
     }
 
+    async getAll(): Promise<SavingsAccount[]> {
+        return await this.accountRepo.find();
+    }
+
 
 }
