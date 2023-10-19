@@ -9,7 +9,7 @@ import { AuthGuard } from "src/infra/auth/auth.guard";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('BankStatement')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('bank-statements')
 export class BankStatementController {
   constructor(
@@ -43,6 +43,9 @@ export class BankStatementController {
     res.header('X-Page-Count', pagination.pageCount.toString());
     res.header('X-Current-Page', pagination.currentPage.toString());
     res.header('X-Per-Page', pagination.itemsPerPage.toString());
+    if(pagination.items.length < 1) {
+      return res.status(200).json(pagination.items)
+    }
 
     return res.status(200).json(BankStatementMapper.toDTO(pagination.items));
   }
@@ -65,6 +68,10 @@ export class BankStatementController {
     res.header('X-Current-Page', pagination.currentPage.toString());
     res.header('X-Per-Page', pagination.itemsPerPage.toString());
 
+    if(pagination.items.length < 1) {
+      return res.status(200).json(pagination.items)
+    }
+
     return res.status(200).json(BankStatementMapper.toDTO(pagination.items));
   }
 
@@ -82,6 +89,10 @@ export class BankStatementController {
     );
 
     try {
+      if(pagination.items.length < 1 ) {
+        return res.status(200).json({ message: 'conta não possui extratos' });
+              
+      }
       await this.bankStatementService.sendMail(BankStatementMapper.toDTO(pagination.items));
       return res.status(200).json({ message: 'E-mail de extratos bancários enviado com sucesso!' });
     } catch (error) {
