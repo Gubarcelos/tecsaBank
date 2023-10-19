@@ -66,7 +66,7 @@ export class TransactionService {
         case regex.test(dto.targetAccountNumber):
           targetAccout = await this.savingAccountService.getAccount(dto.targetAccountNumber);
           targetAccout = await this.savingAccountService.addFounds(targetAccout, amount);
-          await this.bankStatementService.addCPTransaction(dto.type, amount, sourceAccount, dto.description, TransactionDirection.EXIT);
+          await this.bankStatementService.addCPTransaction(dto.type, amount, targetAccout, dto.description, TransactionDirection.EXIT);
           mailTransfer = {
             mail : targetAccout.user.mail,
             subject : "TRANFERENCIA REALIZADA",
