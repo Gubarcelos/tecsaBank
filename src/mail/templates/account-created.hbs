@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conta Bancária Criada com Sucesso</title>
+</head>
+<body>
+    <h1>Conta Bancária Criada com Sucesso</h1>
+    <p>Sua conta bancária foi criada com sucesso. Abaixo estão os detalhes da sua conta:</p>
+
+    {{#if checkingAccountNumber}}
+    <p>Número da Conta Corrente: {{ checkingAccountNumber }}</p>
+    {{/if}}
+
+    {{#if checkingAccountAmaount}}
+    <p>Saldo da Conta Corrente: R$ {{ checkingAccountAmaount }}</p>
+    {{/if}}
+
+    {{#if savingAccountNumber }}
+    <p>Número da Conta Poupança: {{ savingAccountNumber }}</p>
+    {{/if}}
+
+    {{#if savingAccountAmaount}}
+    <p>Saldo da Conta Poupança: R$ {{ savingAccountAmaount }}</p>
+    {{/if}}
+
+    {{#if cpf}}
+    <p>login: {{ cpf }}</p>
+    {{/if}}
+        {{#if numberPassword}}
+    <p>Número de Senha: {{ numberPassword }}</p>
+    {{/if}}
+</body>
+</html>

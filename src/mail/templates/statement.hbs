@@ -1,0 +1,15 @@
+<h1>Extrato Bancário</h1>
+<p>Número da Conta: {{accountNumber}}</p>
+<ul>
+  {{#each statement}}
+    <li>
+      <strong>Descrição:</strong> {{description}}<br>
+      <strong>Valor:</strong> {{amount}}<br>
+      <strong>Tipo:</strong> {{type}}<br>
+      {{#if direction}}
+        <strong>Direção:</strong> {{direction}}<br>
+      {{/if}}
+      <strong>Data de Criação:</strong> {{createdAt}}<br>
+    </li>
+  {{/each}}
+</ul>
